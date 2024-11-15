@@ -36,8 +36,6 @@ class SuperComputadora {    // no hereda de la clase equipo, porque ya cumple co
 
   method cantidadEquiposActivos() = self.equiposActivos().size()
 
-
-
 }
 
 class Equipo {
@@ -120,7 +118,7 @@ class Overclock {
   }
 }
 
-object ahorroDeEnergia {
+class AhorroDeEnergia {
   var computosRealizados = 0
   
   method consumoDe(equipo) = 200    // no importa su tipo, sólo consuma 200 watts
@@ -128,10 +126,21 @@ object ahorroDeEnergia {
 
   method realizoComputo(equipo) {
     computosRealizados += 1 // antes del chequeo
-    if(computosRealizados % 17 == 0){ // divisibles por 17 (divido por 17 y me da resto 0)
+    if(computosRealizados % self.periodicidadDeError() == 0){ // divisibles por 17 (divido por 17 y me da resto 0)
       throw new DomainException(message="Corriendo monitor")
     }
   }
+
+  method periodicidadDeError() = 17 // para no hardcordearlo arriba en el metodo realizoComputo
+
+}
+
+
+class APruebaDeFallos inherits AhorroDeEnergia{
+  override method computoDe(equipo) = super(equipo) / 2 // ofrece la mitad de capacidad de cómputo 
+
+  // Pero... sólo falla por monitorear consumo una vez cada 100 computos.
+  override method periodicidadDeError() = 100   // simplemente overrideo el numero, para no tener que repetir la logica del realizo computo!!
 }
 
 // PROBLEMAS
